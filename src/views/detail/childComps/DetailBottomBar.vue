@@ -1,6 +1,6 @@
 <template>
-  <div class="detail-bottom-bar">
-    <div class="left">
+  <div class="bottom-bar">
+    <div class="bar-item bar-left">
       <div>
         <i class="icon service"></i>
         <span class="text">客服</span>
@@ -14,8 +14,8 @@
         <span class="text">收藏</span>
       </div>
     </div>
-    <div class="right">
-      <div class="cart" @click="addCart">加入购物车</div>
+    <div class="bar-item bar-right">
+      <div class="cart" @click="addToCart">加入购物车</div>
       <div class="buy">购买</div>
     </div>
   </div>
@@ -25,7 +25,7 @@
   export default {
     name: "DetailBottomBar",
     methods: {
-      addCart() {
+      addToCart() {
         this.$emit('addCart')
       }
     }
@@ -33,7 +33,7 @@
 </script>
 
 <style scoped>
-  .detail-bottom-bar {
+  .bottom-bar {
     background-color: #fff;
     height: 49px;
     position: fixed;
@@ -43,44 +43,39 @@
     display: flex;
     text-align: center;
   }
-  .left {
-    width: 50%;
-  }
-  .left,.right {
+  .bar-item {
+    flex: 1;
     display: flex;
   }
-  .left .icon {
+  .bar-item>div {
+    flex: 1;
+  }
+  .bar-left .text {
+    font-size: 13px;
+  }
+  .bar-left .icon {
     display: block;
-    width: 24px;
-    height: 24px;
-    margin: 4px 21px 3px;
-    background:url('~assets/img/detail/detail_bottom.png') 0 0/100%;
+    width: 22px;
+    height: 22px;
+    margin: 2px auto 3px;
+    background: url("~assets/img/detail/detail_bottom.png") 0 0/100%;
   }
-  .left .shop {
-    background-position: 0 57px;
+  .bar-left .service {
+    background-position:0 -54px;
   }
-  .left .service {
-    background-position: 0 107px;
+  .bar-left .shop {
+    background-position:0 -98px;
   }
-  .text {
-    font-size: 14px;
-  }
-  .cart {
-    height: 49px;
-    width: 94px;
-    background-color: #fff737;
-    text-align: center;
-    color:#666;
-    font-size: 16px;
+  .bar-right {
+    font-size: 15px;
+    color: #fff;
     line-height: 49px;
   }
-  .buy {
-    height: 49px;
-    width: 94px;
-    background-color: var(--color-tint);
-    text-align: center;
-    color:#fff;
-    font-size:16px;
-    line-height: 49px;
+  .bar-right .cart {
+    background-color: #ffe817;
+    color: #333;
+  }
+  .bar-right .buy {
+    background-color: #f69;
   }
 </style>

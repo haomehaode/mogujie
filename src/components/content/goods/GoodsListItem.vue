@@ -21,7 +21,7 @@ export default {
     }
   },computed:{
     showImage(){
-      return this.goodsItem.image||this.goodsItem.show.img;
+      return this.goodsItem.img|| this.goodsItem.image||this.goodsItem.show.img
     }
   },
   methods:{
@@ -31,7 +31,12 @@ export default {
     },
     itemClick(){
       console.log('跳转到详情页');
-      this.$router.push('/detail/'+this.goodsItem.iid);
+      if(this.goodsItem.iid==undefined){
+        //this.$router.push('/detail/'+this.goodsItem.item_id)
+      }else{
+        this.$router.push('/detail/'+this.goodsItem.iid);
+      }
+     
     }
   }
 };

@@ -51,7 +51,7 @@ export default {
   flex: 1;
 }
 .active {
-  color: var(--color-high-text);
+  color: rgb(255, 105, 150);
 }
 .back img {
   margin-top: 10px;

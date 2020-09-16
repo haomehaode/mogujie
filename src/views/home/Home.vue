@@ -1,27 +1,21 @@
 <template>
   <div id="home">
+    <!-- 标题栏 -->
     <nav-bar class="home-nav">
-      <div slot="center">购物街</div>
+      <div slot="center">蘑菇街</div>
     </nav-bar>
-    <tab-control
-      :titles="['流行','新款','精选']"
-      @tabClick="tabClick"
-      ref="tabControl1"
-      v-show="isTabFixed"
-      class="tab-control"
-    />
-    <scroll
-      class="content"
-      ref="scroll"
-      :probe-type="3"
-      @scroll="contentScroll"
-      :pull-up-load="true"
-      @pullingUp="loadMore"
-    >
+    <!-- 推荐切换 -->
+    <tab-control class="tab-control" v-show="isTabFixed" :titles="['流行','新款','精选']" @tabClick="tabClick" ref="tabControl1"/>
+    <scroll class="content" :probe-type="3" :pull-up-load="true" @positionScroll="contentScroll" @pullingUp="loadMore" ref="scroll">
+      <!-- 轮播图 -->
       <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad" />
+      <!-- 推荐分类 -->
       <recommend-view :recommends="recommends" />
+      <!-- 本周流行 -->
       <feature-view />
+      <!-- 推荐切换 -->
       <tab-control :titles="['流行','新款','精选']" @tabClick="tabClick" ref="tabControl2" />
+      <!-- 商品展示 -->
       <goods-list :goods="goods[currentType].list" />
     </scroll>
     <!-- 原生组件监听 -->
@@ -76,17 +70,17 @@ export default {
     this.getHomeGoods("sell");
   },
   destroyed() {
-    console.log("页面销毁");
+    console.log("Home页面销毁");
   },
   activated() {
-    //离开
-    console.log("activated");
+    //进来
+    console.log("Home页面进来");
     this.$refs.scroll.scrollTo(0, this.saveY, 0);
     this.$refs.scroll.refresh();
   },
   deactivated() {
-    //进来
-    console.log("deactivated");
+    //离开
+    console.log("Home页面离开");
     this.saveY = this.$refs.scroll.getScrollY();
     this.$bus.$off("itemImageLoad", this.itemImgListener);
   },
@@ -94,7 +88,7 @@ export default {
     //图片加载完成的事件监听
     const refresh = debounce(this.$refs.scroll.refresh,100);
     this.itemImgListener=() => {
-      console.log("图片加载完成Home");
+      //console.log("图片加载完成Home");
       refresh(); /*   this.$refs.scroll.refresh(); */
     };
     this.$bus.$on("itemImageLoad", this.itemImgListener);
@@ -104,7 +98,7 @@ export default {
   },
   methods: {
     backClick() {
-      console.log("回到顶部");
+      console.log("Home回到顶部");
       this.$refs.scroll.scrollTo(0, 0);
     },
     contentScroll(position) {

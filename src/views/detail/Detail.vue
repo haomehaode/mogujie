@@ -1,7 +1,7 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav" @titleItemClick="titleItemClick" ref="detailNavBar"  />
-    <scroll class="content" :probe-type="3" ref="scroll" @scroll="contentScroll" :pull-up-load="true">
+    <scroll class="content" :probe-type="3"  @positionScroll="contentScroll" :pull-up-load="true" ref="scroll">
       <detail-swiper :top-images="topImages" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shops" />
@@ -12,7 +12,7 @@
     </scroll>
     <!-- 原生组件监听 -->
     <back-top @click.native="backClick" v-show="isShowBackTop" />
-    <detail-bottom-bar/>
+    <detail-bottom-bar @addCart="addCart"/>
   </div>
 </template>
 
@@ -103,16 +103,28 @@ export default {
       this.themeTopYs.push(Number.MAX_VALUE);
     },100);
   },
+  destroyed() {
+    console.log("Detail页面销毁");
+  },
+  activated() {
+    //进来
+    console.log("Detail页面进来");
+    this.$refs.scroll.scrollTo(0, this.saveY, 0);
+    this.$refs.scroll.refresh();
+  },
+  deactivated() {
+    //离开
+    console.log("Detail页面离开");
+    this.saveY = this.$refs.scroll.getScrollY();
+    this.$bus.$off("itemImageLoad", this.itemImgListener);
+  },
   mounted(){
     const refresh = debounce(this.$refs.scroll.refresh,100);
     this.itemImgListener=() => {
-      console.log("图片加载完成Home");
+      console.log("图片加载完成Detail");
       refresh(); 
     };
     this.$bus.$on("itemImageLoad", this.itemImgListener);
-  },
-  destroyed(){
-    this.$bus.$off("itemImageLoad", this.itemImgListener);
   },
   methods: {
     imgLoad() {
@@ -120,7 +132,7 @@ export default {
       this.getThemeTopY();
     },
     backClick() {
-      console.log("回到顶部");
+      console.log("Detail回到顶部");
       this.$refs.scroll.scrollTo(0, 0);
     },
     contentScroll(position) {
@@ -138,6 +150,20 @@ export default {
     titleItemClick(index) {
       console.log(index);
       this.$refs.scroll.scrollTo(0,-this.themeTopYs[index],200);
+    },
+    addCart(){
+      console.log('添加商品'+this.iid)
+       // 1.获取需要展示到购物车的商品信息
+      const obj = {
+        image: this.topImages[0],
+        title: this.goods.title,
+        desc: this.goods.desc,
+        price: this.goods.lowNowPrice,
+        iid: this.iid
+      };
+      console.log(obj);
+      // 2.将商品数据传到购物车页面
+      this.$store.dispatch('addCart', obj);
     }
   }
 };
